@@ -64,9 +64,9 @@ $(function() {
 
           it('changes visibility upon click', function() {
             var menuIcon = $('.menu-icon-link');
-            menuIcon.trigger('click');
-            expect($('body').hasClass('menu-hidden')).not.toBe(true);
-            menuIcon.trigger('click');
+            menuIcon.click();
+            expect($('body').hasClass('menu-hidden')).toBe(false);
+            menuIcon.click();
             expect($('body').hasClass('menu-hidden')).toBe(true);
           });
 
@@ -76,9 +76,7 @@ $(function() {
     describe('Initial Entries', function() {
 
         beforeEach(function(done) {
-            loadFeed(0,function() {
-                done();
-            });
+            loadFeed(0,done);
         });
 
         /* A test that ensures when the loadFeed
@@ -96,14 +94,17 @@ $(function() {
 
     describe('New Feed Selection', function() {
 
-        var oldFirstFeed;
+        var firstFeed;
+        var secondFeed;
 
         beforeEach(function(done) {
-            oldFirstFeed = $('.feed .entry-link .entry h2').html();
 
-
-            loadFeed(1,function() {
-                done();
+            loadFeed(0,function() {
+                firstFeed = $('.feed').html();
+                loadFeed(1,function() {
+                    secondFeed = $('.feed').html();
+                    done();
+                });
             });
         });
 
@@ -112,7 +113,7 @@ $(function() {
          */
 
         it('changes the content', function(done) {
-            expect($('.feed .entry-link .entry h2').html()).not.toBe(oldFirstFeed);
+            expect(firstFeed).not.toBe(secondFeed);
             done();
         });
 
